@@ -1,0 +1,150 @@
+body {
+    font: 12px "Segoe UI",ariel,sans-serif;
+}
+
+#main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+}
+
+#iconRss {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 3px;
+    left: 15px;
+    background: url(../img/rssIconTop.png) 0 0 no-repeat;
+}
+
+#siteOffers {
+    height: 30px;
+    width: 285px;
+    line-height: 28px;
+    position: absolute;
+    top: 3px;
+    left: 60px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+    
+    /*border: 1px solid red;*/
+}
+
+#feedsContainer {
+    height: 25px;
+    width: 500px;
+    position: absolute;
+    top: 6px;
+    left: 372px;
+    overflow: hidden;
+}
+
+#tableWrapper {
+    height: 25px;
+    width: 10000px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/*#feedsContainer table {*/
+#feedsContainer .group {
+    height: 25px;
+    width: 500px;
+    float: left;
+}
+
+/*#feedsContainer td {*/
+#feedsContainer  .groupItem{
+    /*border: 1px solid red;*/
+    height: 25px;
+    width: 103px;
+    float:left;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#feedsContainer  .groupItem.added{
+    cursor: default;
+}
+
+.itemCont {
+    height: 25px;
+    /*width: 103px;*/
+    width: 103px;
+}
+
+.itemContIn {
+    height: 25px;
+    /*width: 103px;*/
+    width: 88px;
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    overflow: ellipsis;
+    float: left;
+}
+
+.v {
+    height: 25px;
+    width: 9px;
+    margin-left: 6px;
+    background: url(../img/v.png) 0 50% no-repeat;
+    float: left;
+    display: none;
+}
+
+.groupItem.added .v{
+    display: block;
+}
+
+.groupItem.added .itemContIn {
+    color: #96979b;
+}
+
+.followIt {
+    position: relative;
+    top: -25px;
+    left: 0px;
+    height: 25px;
+    /*width: 103px;*/
+    background: url(../img/followIt.png) 0 0 repeat-x;
+    display: none;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    line-height: 25px;
+    border-radius: 2px 2px 2px 2px;
+}
+
+#feedsContainer  .icon {
+    width: 16px;
+    height: 16px;
+    margin-top: 4px;
+}
+
+.arr {
+    width: 20px;
+    height: 25px;
+    position: absolute;
+    top: 4px;
+    cursor: pointer;
+    visibility: hidden;
+    
+    /*border: 1px solid red;*/
+}
+
+#leftArr {
+    left: 350px;
+    background: url(../img/leftArr.png) 50% 50% no-repeat;
+}
+
+#rightArr {
+    left: 872px;
+    background: url(../img/rightArr.png) 50% 50% no-repeat;
+}

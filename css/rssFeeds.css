@@ -1,0 +1,356 @@
+body{
+    margin:0px;
+    background-color: #e4e4e4;
+    font: 12px "Segoe UI",ariel,sans-serif;
+}
+
+.wrapper{
+    width:381px;
+    height: 560px;
+    overflow: hidden;
+}
+
+.header{
+    width:340px;
+    height:25px;
+    padding-top:3px;
+    background: url('../img/feedHeader.png') no-repeat 0 0;
+    text-align: center;
+}
+
+/*.feedTitle img{
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+}*/
+
+.feedSmth{
+    float:right;
+    position:relative;
+    left:-50%;
+    text-align:left;
+}
+
+.feedText{
+    width: 340px;
+    height: 25px;
+}
+.feedText img{
+    position:relative;
+    left:50%;
+    display: block;
+    float: left;
+    width:16px;
+    height:16px;
+    vertical-align: middle;
+    margin-top: 3px;
+}
+
+.feedTitle{
+    position:relative;
+    left:50%;
+    max-width: 282px;
+    height: 22px;
+    overflow: hidden;
+    display: block;
+    float: left;
+    color:#4D4D4D;
+    vertical-align: middle;
+    padding-left: 5px;
+    font-weight:bold;
+    color: #e4e4e4;
+    text-shadow: #414141 0px 1px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size:14px!important;
+}
+
+/*.feedTitle span{
+    vertical-align: middle;
+    font-weight:bold;
+    font-size:14px;
+    color: #e4e4e4;
+    text-shadow: #414141 0px 1px;
+}*/
+
+.header .closeBtn{
+    position:absolute;
+    top: 8px;
+    right: 13px;
+    width:11px;
+    height:11px;
+    background: url('../img/closeicon.png') no-repeat 0 0;
+    cursor:pointer;
+}
+
+.leftPanel{
+    float:left;
+    width:36px;
+    height:535px;
+    padding-top:27px;
+    background: url('../img/feedListBg.png') 0 0;
+}
+
+.rightPanel{
+    float:left;
+    width:340px;
+    height:562px;
+    padding-left: 5px;
+}
+
+.newsContainer{
+    position: relative;
+    width:340px;
+    height:532px;
+}
+
+#newsList{
+    margin-top: 2px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    width:340px;
+    height:530px;
+}
+
+.scrollTop{
+    width:340px;
+    height:16px;
+    background: url('../img/scrollbg2.png') no-repeat 6px -16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.scrollBottom{
+    width:340px;
+    height:16px;
+    background: url('../img/scrollbg2.png') no-repeat 6px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+ul {
+    list-style: none;
+    padding:0;
+    margin:0;
+}
+
+.newsItem:first-child{
+    border-top: none!important;
+}
+
+.newsItem{
+    border-top: 1px solid #ffffff;
+    width:316px;/*324px;*/
+    padding-left:8px;
+    padding-right: 10px;
+    border-bottom:1px solid #cbd3d7;
+    cursor: pointer;
+}
+
+.newsPerDate .dateHeader{
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    color: #7f7f7f;
+    line-height:26px;
+    padding-left: 5px;
+    background: url('../img/newsDateBg.png') no-repeat 0 0;
+    width:334px;
+    height:26px;
+    display:block;
+    font-weight: bold;
+}
+
+.newsItem.focused {
+    background-color: #d8e4ed;
+}
+
+.newsItem.new {
+    background-color: #e0ebf0;
+}
+
+.newsItem:hover {
+    background-color: #d7d6d5;
+}
+
+.newsItem .newsTitle{
+    /*padding-top:10px;*/
+    margin-top: -1px;
+    color: #364d5c;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.newsItem .newsText{
+    padding-top:5px;
+    color: #3b4247;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    font-size: 13px;
+    padding-bottom:8px;
+}
+
+.newsItem .newsTime {
+    position: relative;
+    top: 3px;
+    left: 289px;
+    width: 35px;
+    font-size: 11px;
+    line-height: 14px;
+    font-weight: bold;
+    color: #8c8c8c;
+    /*background-color: #fff;*/
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.newsItem.odd .newsTimeLine{
+    position: relative;
+    top: 1px;
+    left: 288px;
+    width: 35px;
+    height: 1px;
+    background-color: #9ca2a5;
+}
+
+.newsItem.odd .newsTime {
+    /*left: 290px;*/
+    top: 0px;
+    color: #fff;
+    background-color: #afb4b8;
+    border: 1px solid #9ca2a5;
+    border-radius: 0px 0px 0px 2px;
+}
+
+#feedListWrap {
+    width:42px;
+    height:536px;
+    overflow: hidden;
+}
+
+#feedList{
+    width:36px;
+    /*background: url('../img/feedListBg.png') 0 0;*/
+}
+
+#feedList .feedItem{
+    width:25px;
+    height:28px;
+    padding: 8px 0 0 11px;
+    cursor: pointer;
+}
+
+#feedList .feedItem.clicked{
+    background: url('../img/clickedFeed.png') no-repeat 2px 0;
+}
+
+#feedList .feedItem:hover:not(.clicked){
+    background: url('../img/hoverFeed.png') no-repeat 2px 0;
+}
+
+#feedList .feedImg{
+    width:16px;
+    height:16px;
+}
+
+.feedItemLoader{
+    width:25px;
+    height:28px;
+    padding: 8px 0 0 11px;
+}
+
+#feedList .feedItem.deleted  .feedImg{
+    opacity: 0.3;
+}
+
+#feedList .feedItem img {
+    width: 16px;
+    height: 16px;
+}
+
+#feedList .x {
+    position: relative;
+    top: -26px;
+    left: 16px;
+    width: 15px;
+    height: 15px;
+    background: url('../img/x.png') 0 0 no-repeat;
+    cursor: pointer;
+    display: none;
+}
+
+#feedList .undo {
+    position: relative;
+    top: -16px;
+    left: 0px;
+    width: 16px;
+    height: 16px;
+    background: url('../img/undo.png') 0 0 no-repeat;
+    cursor: pointer;
+    display: none;
+}
+
+li.feedItem .newOrOld {
+    position: relative;
+    top: -17px;
+    left: -8px;
+    width: 5px;
+    height: 19px;
+    background: url('../img/oldFeed.png') no-repeat 0 0;
+}
+
+li.feedItem:hover .newOrOld , li.feedItem.clicked .newOrOld, .x.visible ~ .newOrOld, .undo.visible ~ .newOrOld {
+    display: none;
+}
+
+#feedList .feedItem.isNew .newOrOld {
+    background: url('../img/newFeed.png') no-repeat 0 0;
+}
+
+#scrollUp{
+    position: absolute;
+    top: 0;
+    width: 35px;
+    height: 29px;
+    background: url('../img/scrollUp.png') 0 0 no-repeat;
+    cursor: pointer;
+    display: none;
+}
+
+#scrollDown{
+    width: 35px;
+    height: 28px;
+    position: absolute;
+    top: 532px;
+    background: url('../img/scrollDown.png') 0 100% no-repeat;
+    cursor: pointer;
+    display: none;
+}
+
+#noNews {
+    width: 100%;
+    font-size:16px;
+    text-align: center;
+    padding-top: 225px;
+}
+
+
+/*
+Scrollbar
+*/
+::-webkit-scrollbar {
+    height: 7px;
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8c8c8c;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    min-height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: inherit;
+}
+

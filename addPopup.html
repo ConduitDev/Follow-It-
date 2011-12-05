@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="img/icon16.png" rel="shortcut icon" type="image/x-icon">
+        <script src="http://config.conduitapps.com/carbon/followIt/config.js"></script>
+        <script src="js/jquery-1.6.4.min.js"></script>
+        <style>
+            body{
+                background-color: #E4E4E4;
+                font: 14px "Segoe UI",ariel,sans-serif;
+                text-shadow: white 0px 1px;
+                margin: 0;
+                padding: 0;
+                color:#000000;
+            }
+            #addContainer,  #progressContainer {
+                margin-left: 2px;
+                margin-top: 3px;
+                float: left
+            }
+            #progressContainer{
+                display: none;
+            }
+            #textLabel {
+                width: 197px;
+                padding-left: 3px;
+                float: left;
+                margin-bottom: 4px;
+            }
+            #url {
+                /*border: 1px solid #d3d3d3;
+                background-color: #eeeeee;
+                border-radius: 2px;*/
+                padding-left: 5px;
+                padding-right: 3px;
+                width: 136px;
+                line-height: 20px;
+                display: block;
+                float: left;
+				background: url('img/inputBg.png') no-repeat 0 0;
+				border:none;
+            }
+            #progress {
+                width: 198px;
+                height: 15px;
+                margin-left: 2px;
+                margin-top: 7px;
+                float: left;
+                background: url('../img/progress.png') -198px 0 no-repeat;
+            }
+            #addBtn {
+                width: 51px;
+                height: 24px;
+                margin-left: 3px;
+                margin-top: 2px;
+                background: url('../img/addBtn.png') 0 0 no-repeat;
+                cursor: pointer;
+                float: left;
+            }
+          </style>
+          <script>
+              var leaveTimeout;
+              var winId = window.location.search.split('?id=')[1];
+              chrome.smartapp.child.onCreated.addListener(function(child){
+                if (child.name == 'addPopUp'){
+                        if (child.id != winId){
+                            closeWindow();
+                        }
+                    }
+                });
+              if(winId != 'undefined'){
+                    chrome.smartapp.child.get(parseInt(winId),function(obj){
+                        var params = obj.initParams;
+                    });
+              }
+              
+              function moveProgress(posVal) {
+                    if(posVal < 0) {
+                        setTimeout(function(){
+                            posVal+=11;
+                            $('#progress').css('background-position', posVal+'px 0');
+                            moveProgress(posVal);
+                        }, 100);
+                    }
+              }
+              
+              //setTimeout(closeWindow, 5000);
+              
+              function closeWindow(){
+                    var id = parseInt(location.search.substr(4));
+                    chrome.smartapp.child.remove(id);
+              }
+              
+              function checkUrl(url) {
+                    var sendUrl = $.trim(url)
+                    if(sendUrl == 0 || sendUrl == 'http://') return;
+                    $('#addContainer').hide();
+                    $('#progressContainer').show();
+                    moveProgress(-198);
+                    $.getJSON(config.feedFinderURL+encodeURIComponent(sendUrl)+'&callback=?', function(data){
+                        if(data.feeds.length == 0) {
+                            setTimeout(function(){
+                                chrome.extension.sendRequest({msg: "showPopUp", feed: {error:'error'}});
+                                closeWindow();
+                            }, 2000);
+                            return;
+                        }
+                        data.feeds[0].id = new Date().getTime();
+                        chrome.extension.sendRequest({msg: "ReaderAppNewFeed", feed: data.feeds[0]});
+                    });
+              }
+              function init() {
+                    $('#url').val(localStorage['readerAppCurrentTab']);
+                    
+                    leaveTimeout = setTimeout(closeWindow, 5000);
+                    
+                    initMouseLeave();
+                    
+                    chrome.extension.onRequest.addListener(function(request, sender) {
+                        if (request.msg == "showPopUp") {
+                            closeWindow();
+                        }
+                    });
+                    
+                    $('body').mouseenter(function(){
+                        clearTimeout(leaveTimeout);
+                    });
+                    
+                    $('#url').focus(function(){
+                        //if($.trim($(this).val()) == 'http://') $(this).val('');
+                        $(this).val('http://');
+                        killMouseLeave()
+                    });
+                    
+                    $('#url').blur(function(){
+                        //if($.trim($(this).val()) == '') $(this).val('http://');
+                        initMouseLeave();
+                    });
+                    
+                    $('#url').keypress(function(e) {
+                        if(e.which == 13) {
+                            checkUrl($(this).val());
+                        }
+                    });
+              }
+              
+              function initMouseLeave() {
+                    //clearTimeout(leaveTimeout);
+                    $('body').mouseleave(function(){
+                        leaveTimeout = setTimeout(closeWindow, 5000);
+                    });
+              }
+              
+              function killMouseLeave() {
+                    $('body').unbind('mouseleave');
+              }
+              
+              function press(e) {
+                    if(e.which == 13) checkUrl(this.value);
+              }
+          </script>
+    </head>
+    <body onload="init()">
+       <div id="addContainer">
+            <div id="textLabel">
+                Add a URL to your list :
+            </div>
+            <input id="url" type="text" value="http://">
+            <div id="addBtn" onclick="checkUrl($('#url').val())"></div>
+       </div>
+       <div id="progressContainer">
+            <div id="textLabel">
+                Adding..
+            </div>
+            <div id="progress"></div>
+       </div>
+    </body>
+</html>

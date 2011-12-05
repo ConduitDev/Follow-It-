@@ -1,0 +1,279 @@
+var Wall = function(_twitter){
+    var wall = this;
+    var twitter = _twitter;
+    var newTweets = [];
+    var TWEET_LI_HEIGHT;
+
+    function bindEvents(){
+        twitter.addEventListener("statuses", onStatuses);
+        twitter.addEventListener("retweeted", onRetweeted);
+        twitter.addEventListener("replied", onReplied);
+        twitter.addEventListener("tweeted", onTweeted);
+        twitter.addEventListener("credentials", onCredentials);
+        onStatuses(twitter.getTweets());
+        $("#timeline").delegate("li", "click", function(e){
+            if (!e.target.href) {
+                if ($(e.target).parent(".edit_box").length == 0) {
+//                    console.log("open tweet in new tab, close wall", this, e.target);
+                    chrome.tabs.create({url: "http://twitter.com/#!/" + this.dataset.screenName + "/status/" + this.dataset.id});
+                    //parentWindow.getSmartApp().closeWall();
+                    closeWall();
+                }
+            } else if (e.target.href.indexOf("http://twitter.com/") === 0) {
+//                console.log("open link in new tab, close wall", this, e.target);
+                chrome.tabs.create({url: e.target.href});
+                //parentWindow.getSmartApp().closeWall();
+                closeWall();
+                e.preventDefault();
+                return false;
+/*
+            } else {
+                console.log("normal link: open link in new tab, wall remains open", this, e.target);
+                e.preventDefault();
+                return false;
+*/
+            }
+        });
+        $("#close_panel_btn").bind("click", function(){
+            //parentWindow.getSmartApp().closeWall();
+            closeWall();
+        });
+        $('#new_tweet_btn').bind('click',function(){
+
+            $('#state2').toggleClass('new_tweet');
+            $("#new_tweet_box textarea").val("").focus();
+        });
+
+        $("#timeline").delegate("li.tweet:not(.editmode)", "webkitTransitionEnd",function(e){
+            var editBox = $(this).find(".edit_box");
+            if (editBox.length) {
+//                console.log("1. webkitTransitionEnd:", e);
+                editBox.unbind().remove();
+            }
+        });
+
+/*        $("#timeline").delegate("li.tweet.editmode", "webkitTransitionEnd",function(e){
+            console.log("2. webkitTransitionEnd:", e);
+        });*/
+        $('#notification').bind('click',function(){
+            console.log("notification click");
+            wall.displayNewTweets();
+        });
+        var _userCredentials = parentWindow.getSmartApp().getCredentials();
+        if (_userCredentials) {
+            onCredentials(_userCredentials);
+        }
+        bindEditor($("#new_tweet_box"));
+/*        $('#timeline .reply_btn').bind('click',function(){
+            $(this).parents('.tweet').toggleClass('editmode');
+        });*/
+        setInterval(function(){twitter.updateAllTimes(document)}, 20000);
+    }
+
+    function onCredentials(userCredentials){
+        $("#new_tweet_box .user_nick, #reply_tweet_box .user_nick")
+            .attr("href", "http://twitter.com/#!" + userCredentials.screen_name)
+            .attr("title", userCredentials.screen_name)
+            .text(userCredentials.name + " :");
+    }
+    function bindEditor(editorDiv){
+        var tweetBtn = editorDiv.find(".tweet_btn");
+//        console.log("bindEditor:",editorDiv, tweetBtn);
+        editorDiv.find("textarea").bind("change keydown keypress keyup", function(e){
+            console.log(e);
+            var text = $(this).val();
+            var charsLeft = parentWindow.getSmartApp().getCharsLeft(text);
+            editorDiv.find(".charsLeft").text(charsLeft);
+            if (charsLeft < 0) {
+                editorDiv.removeClass("tooLong10").addClass("tooLong0");
+                tweetBtn.attr("disabled", "disabled");
+            } else if (charsLeft <= 10) {
+                editorDiv.removeClass("tooLong0").addClass("tooLong10");
+                tweetBtn.removeAttr("disabled");
+            } else {
+                editorDiv.removeClass("tooLong10").removeClass("tooLong0");
+                tweetBtn.removeAttr("disabled");
+            }
+        });
+        editorDiv.find('.cancel_btn').click(function(ev){
+            return wall.tweetCancel(editorDiv, ev);
+        });
+        tweetBtn.click(function(ev){
+            var textarea = editorDiv.find("textarea");
+            var status = textarea.val();
+            var charsLeft = parentWindow.getSmartApp().getCharsLeft(status);
+            if (140 > charsLeft && charsLeft >= 0) {
+                var inReplyToStatusId = textarea.data("reply-id");
+                twitter.statusesUpdate(status, inReplyToStatusId);
+            } else {
+                textarea.focus();
+            }
+        });
+    }
+
+    function notifyNewTweets(){
+        if (newTweets.length) {
+            $('#notification').text(newTweets.length + " new tweet" + (newTweets.length >1 ? "s" : ""));
+            $('#state2').addClass('notification_mode');
+        } else {
+            $('#state2').removeClass('notification_mode');
+        }
+    }
+    function onStatuses(statuses){
+        $("body").removeClass("loading");
+        if (statuses.length) {
+//            console.log("onStatuses: ", statuses);
+            if ($("#timeline li").length) {
+                newTweets = statuses.concat(newTweets);
+                notifyNewTweets();
+            } else {
+                appendTweets(statuses);
+                wall.displayNewTweets();
+            }
+        }
+    }
+    function scrollToOffset(y){
+        console.log("scrollToOffset: y:", y);
+        $('#timeline').stop().animate({scrollTop:y}, 'fast');
+    }
+/*
+    function scrollToTweet(i){
+        if (!TWEET_LI_HEIGHT) {
+            var li = $('#timeline li:not(.editmode):last-child');
+            if (li.length) {
+                TWEET_LI_HEIGHT = li.height() + parseInt(li.css("padding-top")) + parseInt(li.css("padding-bottom") + parseInt(li.css("border-bottom-width")) + parseInt(li.css("border-bottom-width")));
+//                console.log("li.borderBottom:", parseInt(li.css("border-bottom-width")));
+            }
+            TWEET_LI_HEIGHT = 84;
+        }
+        var top = i * TWEET_LI_HEIGHT;
+        console.log("scrollToTweet: i:"+i+", T_LI_H:"+TWEET_LI_HEIGHT+", top:"+top);
+        $('#timeline').stop().animate({scrollTop:top}, 'fast');
+    }
+*/
+    this.displayNewTweets = function(){
+        console.log("displayNewTweets");
+        var tweets = newTweets.splice(0, newTweets.length);
+        appendTweets(tweets);
+        $('#state2').removeClass('notification_mode');
+        scrollToOffset(0);
+        parentWindow.getSmartApp().displayNewTweets();
+    };
+    function appendTweets(statuses){
+        if (statuses.length) {
+//            console.log("appendTweets", statuses);
+            var fragment = document.createDocumentFragment();
+            var ul = $("#timeline");
+            var added = 0;
+            for (var i = statuses.length - 1; i >= 0; i--) {
+                var status = statuses[i];
+                if ($("[data-id=" + status.id_str + "]").length == 0) {
+                    var timestamp = parseInt(status.created_at_date.getTime()/1000);
+                    var ago = twitter.timestampToAgoStr(timestamp, "long");
+                    var author = {
+                        screen_name: status.user.screen_name,
+                        name: status.user.name,
+                        profile_image_url: status.user.profile_image_url
+                    };
+                    var retweeted_by = {
+                        screen_name: status.user.screen_name
+                    };
+                    if (status.retweeted_status) {
+                        retweeted_by = author;
+                        author = {
+                            screen_name: status.retweeted_status.user.screen_name,
+                            name: status.retweeted_status.user.name,
+                            profile_image_url: status.retweeted_status.user.profile_image_url
+                        };
+                    }
+                    var li = $('<li data-id="' + status.id_str + '" data-screen-name="' + retweeted_by.screen_name + '" class="tweet' + (status.current_user_retweet ? " retweeted" : "") + '">'
+                        + '<div class="tweet_header">'
+                        +  '<a class="user_pic" href="http://twitter.com/#!' + author.screen_name + '" title="' + author.name + '"><img src="' + author.profile_image_url + '" alt=""></a>'
+                        +  '<a class="user_nick" href="http://twitter.com/#!' + author.screen_name + '" title="' + author.name + '">' + author.screen_name + '</a>'
+                        +  '<span class="tweet_time updateTime long" data-timestamp=' + timestamp + '>' + ago + '</span>'
+                        +  '<div class="twi_controls">'
+                        +   '<a href="#retweet_' + status.id_str + '" onclick="return wall.retweet(\'' + status.id_str + '\')" class="retweet_btn btn">Retweet</a>'
+                        +   '<a href="#reply_' + status.id_str + '" onclick="return wall.reply(\'' + status.id_str + '\')" class="reply_btn btn">Reply</a>'
+                        +  '</div>'
+                        + '</div>'
+                        + '<div class="tweet_body">'
+                        + status.text
+                        + (retweeted_by.name ? '<span class="retweeted_by">Retweeted by <a class="user_nick" href="http://twitter.com/#!' + retweeted_by.screen_name + '" title="' + retweeted_by.name + '">' + retweeted_by.screen_name + '</a></span>' : '')
+                        + '</div>'
+                        + '</li>');
+                    fragment.appendChild(li[0]);
+                    added++;
+                }
+            }
+            ul.prepend(fragment.cloneNode(true));
+        }
+    }
+
+    this.retweet = function(id){
+        parentWindow.getSmartApp().retweet(id);
+        return false;
+    };
+    function onRetweeted(response){
+        console.log("retweeted", response);
+        $("[data-id=" + response.retweeted_status.id_str + "]").addClass("retweeted");
+    }
+    this.reply = function(id){
+        var li = $("#timeline li[data-id='" + id + "']");
+        if (!li.hasClass("editmode")) {
+            $("#timeline li.editmode").removeClass('editmode');
+    /*
+            li.one("webkitTransitionEnd",function(e){
+                console.log("3. webkitTransitionEnd:", e);
+                $(this).one("webkitTransitionEnd",function(f){
+                    console.log("4. webkitTransitionEnd:", e, f);
+                    $(this).find(".edit_box").remove();
+                });
+            });
+    */
+            var template = $("#reply_tweet_box");
+            var clone = template.clone();
+            clone.removeAttr("id");
+            var textarea = clone.find("textarea");
+            textarea.data("reply-id", id).val("@" + li[0].dataset.screenName + " ");
+            var pos = textarea.val().length;
+            clone.find(".charsLeft").text("" + (140 - pos));
+            bindEditor(clone);
+            li.append(clone);
+            //clone.appendTo(li);
+            textarea.focus()[0].setSelectionRange(pos, pos);
+            // find out howmany tweets are before this one
+            //var index = $("#timeline li").index(li);
+            var o = li[0].offsetTop;
+            var e = $("#timeline .edit_box").height() || 0;
+            console.log("reply to:",id,o,e);
+            //scrollToTweet(index);
+            scrollToOffset(o-e);
+            setTimeout(function(){li.addClass('editmode')}, 0);
+        } else {
+            li.removeClass('editmode');
+        }
+        return false;
+    };
+    function onReplied(response){
+        console.log("replied", response);
+        wall.tweetCancel($("#timeline li[data-id='" + response.in_reply_to_status_id_str + "'] .edit_box"));
+    }
+    function onTweeted(response){
+        console.log("tweet sent: ", response);
+        wall.tweetCancel($("#new_tweet_box"));
+    }
+    this.tweetCancel = function(editorDiv, ev){
+//        console.log("tweetCancel:", editorDiv, ev);
+        if (editorDiv.attr("id") == "new_tweet_box") {
+            $('#state2').removeClass('new_tweet');
+        } else {
+            editorDiv.parent().removeClass("editmode");
+        }
+        return false;
+    };
+    function closeWall(){
+        var id = parseInt(location.search.substr(4));
+        chrome.smartapp.child.remove(id);
+    }
+    bindEvents();
+};

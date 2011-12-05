@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Follow it!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="img/icon16.png" rel="shortcut icon" type="image/x-icon">
+        <link href="css/main.css" type="text/css" rel="stylesheet">
+        <script src="http://config.conduitapps.com/carbon/followIt/config.js?a=1"></script>
+        <script src="js/mainWindow.js"></script>
+        <script src="js/jquery-1.6.4.min.js"></script>
+    </head>
+    <body onload="smartAppInit();">
+        <div class="loader" style="display:none;"></div>
+        <div id="dockedMode">
+            <div id="mainFrame" class="viewMode" style="width: 164px;display:none;">
+                <div class="defaultHead">
+                    Recommended sources:
+                </div>
+                <div class="spaceLine1"></div>
+                <div class="recomendBlock">
+                    <ul id="recomendFeeds">
+                    </ul>
+                </div>
+                <div class="spaceLine1"></div>
+                <div class="bottomText">
+                    * Suggestions based on your personal
+                </div>
+            </div>
+            <div class="viewMode" id="defaultState">
+                <div class="feedListContainer">
+                    <div class="topBg"></div>
+                    <div class="feedListsItems">
+                        <ul class="feedList new">
+                        </ul>
+                        <div class="newsSplitter"></div>
+                        <ul class="feedList old">
+                        </ul>
+                    </div>
+                    <div class="bottomBg"></div>
+                </div>
+                <div sctyle="clear:both"></div>
+                <div id="readAll"><span>Read All (0)</span></div>
+                <div id="addFeed" title="Click to add a new RSS feed"></div>
+            </div>
+        </div>
+    </body>
+</html>

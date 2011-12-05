@@ -1,0 +1,62 @@
+{
+    "name": "Follow it!",
+    "version": "0.0.8",
+    "description": "RSS reader application",
+    "update_url": "http://carbon.conduit.com/webstore/apps/twitter/update.xml",
+    "background_page": "background.html",
+    "smartapp": {
+        "smartapp_url": "smartapp.html",
+        "minibar_appearance": "html",
+        "default_height": 205,
+        "browser_action": {
+            "default_icon": "img/icon16.png",
+            "default_title": "RSS reader",
+            "default_popup": "smartapp.html"
+        },
+        "child_windows" : [
+            {
+                "name": "newsFeeds",
+                "url": "newsFeeds.html",
+                "attached": true,
+                "minibar_appearance": "html",
+                "default_width": 550,
+                "default_height": 560,
+                "frame_type": "arrow",
+                "close_on_lost_focus": true,
+                "inspect": false
+            },
+            {
+                "name": "popUp",
+                "url": "popup.html",
+                "attached": true,
+                "default_state": "roaming",
+                "minibar_appearance": "html",
+                "default_width": 205,
+                "default_height": 60,
+                "frame_type": "arrow",
+                "close_on_lost_focus": true,
+                "inspect": false
+            },
+            {
+                "name": "addPopUp",
+                "url": "addPopup.html",
+                "attached": true,
+                "default_state": "roaming",
+                "minibar_appearance": "html",
+                "default_width": 205,
+                "default_height": 60,
+                "frame_type": "arrow",
+                "close_on_lost_focus": true,
+                "inspect": false
+            }
+        ]
+    },
+    "content_scripts": [ {
+        "js": [ "js/sniff_common.js", "js/feed_finder.js" ],
+        "matches": [ "http://*/*", "https://*/*" ],
+        "run_at": "document_end"
+    } ],
+    "permissions": [
+        "history", "tabs", "http://*/*", "https://*/*"
+    ]
+}

@@ -1,0 +1,804 @@
+/*twitter ui*/
+body{
+    overflow: hidden;
+    background: #deb887;
+}
+ul,body,li{
+    margin: 0;
+    padding: 0;
+    list-style:none;
+}
+/*this block is not nesseasry for the smartapp*/
+.smartapp{
+    overflow:hidden;
+    margin: 15px;
+    width:172px;
+    height:232px;
+    padding: 25px 3px 3px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.6),-1px -1px 3px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.6);
+    background: #e4e4e4;
+    font: 13px "Segoe UI",ariel,sans-serif;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+}
+.smartappwide{
+    width:346px;
+    height: 402px;
+    padding: 3px;
+}
+/* end general block*/
+
+/*state 1*/
+#state1{
+    background: #e4e4e4 url(../img/twitter_bg2.png) no-repeat 0 2px;
+    width:164px;
+    height:205px;
+    overflow:hidden;
+    position: relative;
+}
+#state1::after{
+    background: url(../img/twitter_seperators.png) no-repeat 0 0,url(../img/top_shadow.png) no-repeat 0 0;
+    position: absolute;
+    left:0;top:0;
+    content: "";
+    width:164px;
+    height:205px;
+    z-index: 600;
+    pointer-events:none;
+}
+
+/* === login mode ===== */
+#login{
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    background: #e4e4e4 url(../img/twitter_login.png) 50% 55px no-repeat;
+}
+.login #login{
+    display: block;
+}
+#login_btn{
+    background: #e4e4e4 url(../img/twitter_login.png) 0 -205px no-repeat;
+    width: 88px;
+    height: 35px;
+    cursor: pointer;
+    margin: 0 auto;
+    margin-top:108px;
+}
+#login_btn:hover{
+    background-position:0 -240px;
+    margin-top:109px;
+    height: 34px;
+}
+#login_btn:active{
+    background-position:0 -274px;
+}
+/* === login mode  end ===== */
+#state1.editmode::after{
+    height:20px;
+    z-index: 600;
+}
+#timeline_container{
+    width:158px;
+    height:174px;
+    margin-top:2px;
+    margin-bottom:2px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.editmode #timeline_container{
+    overflow-y:hidden;
+}
+.tweet{
+    width:155px;
+    height: 176px;
+    overflow: hidden;
+    padding: 5px;
+    position: relative;
+    color:#242424;
+}
+.tweet a{
+    color:#0676b0;
+    text-decoration: none;
+}
+.tweet a:hover{
+    text-decoration: underline;
+}
+.tweet_header{
+    margin-bottom: 8px;
+    height: 26px;
+}
+.twi_controls{
+    display: none;
+    position: absolute;
+    right:2px;
+    top:5px;
+    width: 45px;
+    height: 26px;
+
+    -webkit-user-select:none;
+    user-select:none;
+    background: #E4E4E4;
+
+}
+.tweet:hover .twi_controls{
+    display: block;
+}
+.tweet:hover .tweet_time{
+    display: none;
+}
+.retweet_btn,.reply_btn{
+    cursor: pointer;
+    width:20px;
+    height:15px;
+    display: inline-block;
+}
+
+.reply_btn{
+    background-position: 0px -521px;
+}
+.reply_btn:hover{
+    background-position: 0px -561px;
+}
+.reply_btn:active{
+    background-position: 0px -602px;
+}
+.retweet_btn{
+    background-position: 0px -115px;
+}
+.retweet_btn:hover{
+    background-position: 0px -156px;
+}
+.retweet_btn:active{
+    background-position: 0px -196px;
+}
+.user_pic {
+    float:left;
+    width: 26px;
+    height: 26px;
+}
+.user_pic img{
+    max-height: 26px;
+    max-width: 26px;
+}
+.user_nick{
+    padding-left: 5px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    color:#494949 !important;
+    vertical-align: top;
+    width: 90px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    display: block;
+    white-space: nowrap;
+
+}
+.tweet_time{
+    font-size: 11px;
+    text-shadow: none;
+    font-weight: normal;
+    vertical-align: top;
+    color:#a2a4a5;
+    letter-spacing: -1px;
+    position: absolute;
+    top: 7px;
+    right:12px;
+}
+.tweet_body{
+    clear:both;
+}
+/*
+    controls
+*/
+#controls{
+    letter-spacing: -4px;
+    -webkit-user-select:none;
+}
+.control{
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    letter-spacing: normal;
+    font-size: 11px;
+    line-height: 26px;
+    z-index: 700;
+
+}
+.control::after{
+    background: url(../img/single_sep.png) right 1px no-repeat;
+    content:"";
+    position: absolute;
+    right:0;
+    top:0;
+    height: 100%;
+    width: 2px;
+}
+
+
+
+/*buttons sprite*/
+.btn{
+    background-image: url(../img/twi_sprite.png);
+    background-repeat: no-repeat;
+}
+#controls .control:nth-last-child(1)::after,#cancel_btn::after{
+    background: none;
+}
+#all_btn,#tweet_btn{
+    width:50px;
+    height: 25px;
+    cursor: pointer;
+    background-position: 5px -354px;
+    text-indent: 25px;
+    font-weight: bold;
+    color:#808080
+}
+#all_btn:hover,#tweet_btn:hover{
+    background-position: 5px -394px;
+    color:#4f4e59;
+}
+#all_btn:active,.trends #all_btn{
+    background-position: 0 -883px;
+    color:#5dd7ff;
+    text-shadow: 0 1px 0 rgba(79, 78, 89,0.8);
+}
+#tweet_btn:active{
+    color:#4f4e59;
+    /*text-shadow: 0 1px 0 rgba(79, 78, 89,0.8); */
+    background-position: 5px -435px;
+}
+
+#updown_cont{
+    width:60px;
+    height: 25px;
+}
+.updown{
+    width: 25px;
+    height: 30px;
+    display: inline-block;
+    text-align: center;
+}
+#up_btn{
+    background-position: 9px 12px;
+}
+#up_btn:hover{
+    background-position: 5px -717px;
+}
+#up_btn:active{
+    background-position: 5px -798px;
+}
+#down_btn{
+    background-position: 9px -28px;
+}
+#down_btn:hover{
+    background-position: 5px -677px;
+}
+#down_btn:active{
+    background-position: 5px -758px;
+}
+#new_btn{
+    width:42px;
+    height: 25px;
+    cursor: pointer;
+    background-position: 5px -232px;
+    text-indent: 23px;
+    color:#808080;
+    font-weight: bold
+}
+#new_btn:hover{
+    color:#4f4e59;
+    background-position: 5px -273px;
+}
+
+#new_btn:active{
+    color:#4F4E59;
+    /*text-shadow: 0 1px 0 rgba(79, 78, 89,0.8);*/
+    background-position: 5px -313px;
+}
+
+
+/* ====  EDIT MODE  ===== */
+
+#tweetmode{
+    background: url(../img/page.png) 0 0 no-repeat;
+    width:162px;
+    height: 191px;
+    position: absolute;
+    top:-191px;
+    left:0;
+    z-index: 500;
+    -webkit-transition:top 400ms ease-in-out;
+}
+.editmode #tweetmode{
+    top:0px;
+}
+#reply_header{
+    padding-left:10px;
+    padding-top: 5px;
+    position: absolute;
+    top:0;
+}
+#reply_header .user_nick{
+    color:#6b7680;
+    padding-top:2px;
+}
+#tweetmode textarea{
+    /*background: rgba(255, 2, 15, 0.3);*/
+    background: none;
+    resize: none;
+    width: 134px;
+    height: 144px;
+    border: none;
+    outline: none;
+    margin-left: 19px;
+    margin-top: 31px;
+    font-size: 13px;
+    color:#13547d;
+}
+#charcount{
+    font-weight: bold;
+    font-size: 13px;
+    color:#918a48;
+    position: absolute;
+    bottom:16px;
+    left: 68px;
+    width: 40px;
+    text-shadow: 1px 0 0 rgba(255,255,255,0.5)
+
+}
+/* hide regular btns in edit mode */
+.editmode #controls{
+    display: none;
+}
+
+/*hide editmode btns in reg mode*/
+#tweet_controls{
+    display: none;
+}
+/* show editmode btns */
+.editmode #tweet_controls{
+    display: block;
+    letter-spacing: -4px;
+    -webkit-user-select:none;
+    user-select:none;
+    background:url(../img/single_sep.png) 48% 1px no-repeat,url(../img/twitter_seperators.png) 2px -178px no-repeat;
+    height: 30px;
+}
+
+#tweet_btn {
+    width : 50%;
+    position: relative;
+    z-index: 700;
+}
+#tweet_btn::after{
+    background: none;
+}
+#cancel_btn{
+    width:49%;
+    text-indent: 25px;
+    cursor: pointer;
+    position: relative;
+    z-index: 700;
+    color: #808080;
+    background: url(../img/close_sprite.png) 11px 7px no-repeat;
+}
+#cancel_btn:hover{
+    color: #4f4e59;
+    background-position: 11px -41px;
+}
+
+/* ===  end edit mode  === */
+
+/* ===  notification mode === */
+.notif_style{
+    background: linear-gradient(top,#7E7D8C,#5A5965);
+    background: -webkit-linear-gradient(top,#7E7D8C,#5A5965);
+    box-shadow: 0 1px 0 #fff,inset 1px 1px 2px rgba(0,0,0,.6),inset -1px -1px 2px rgba(0,0,0,.6);
+}
+#notification{
+    width: 148px;
+    height: 37px;
+    position: absolute;
+    top: -37px;
+    left: 4px;
+    z-index: 500;
+    -webkit-transition: top 400ms ease-in-out;
+    border-radius: 0 0 3px 3px;
+    color:#c0e4f3;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+    cursor: pointer;
+    -webkit-user-select:none;
+    user-select:none;
+    font-size: 12px;
+    box-sizing: border-box;
+    padding: 11px 0 0 60px;
+    z-index: 200;
+}
+#notification::before{
+    position: absolute;
+    content:"";
+    left:0;top:0;
+    width:53px;height: 35px;
+    background:url(../img/notif_bird.png) 2px 2px no-repeat;
+}
+.notification_mode #notification{
+    top:0px;
+}
+/* ===  end notification mode === */
+
+
+/* ===  trends mode === */
+#trends{
+    width: 164px;
+    height: 178px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 800;
+    background: #e4e4e4;
+    display: none;
+}
+.trends #trends{
+    display: block;
+}
+#trends_header{
+    border-radius: 3px 3px 0 0;
+    width:100%;
+    height: 34px;
+}
+#trends_header::before{
+    background: url(../img/trends_header.png) 5px 5px no-repeat;
+    position: absolute;
+    width: 100%;height: 34px;
+    content: "";
+}
+#trends_header::after{
+    background: url(../img/twitter_seperators.png) no-repeat 0 0,url(../img/top_shadow.png) no-repeat 0 0;
+    position: absolute;
+    left:2px;top:34px;
+    content: "";
+    width:164px;
+    height:205px;
+    z-index: 600;
+    pointer-events:none;
+}
+
+#trends_list{
+    height: 135px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-left: 5px;
+    margin-top: 5px;
+}
+#trends_list li{
+    width: 150px;
+    height: 22px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    cursor: pointer;
+    line-height: 20px;
+    color:#242424;
+    border-radius: 2px;
+    margin: 3px 0;
+}
+#trends_list li:hover{
+    color:#fff;
+    text-shadow: none;
+    background: linear-gradient(top,#7E7D8C,#5A5965);
+    background: -webkit-linear-gradient(top,#7E7D8C,#5A5965);
+    box-shadow: 0 1px 0 #fff,inset 1px 1px 2px rgba(0,0,0,.6),inset -1px -1px 2px rgba(0,0,0,.6);
+}
+#trends_list li:active{
+    text-shadow: 0 1px 0 #0488b4;
+    background: linear-gradient(top,#00a9e0,#00a9e0);
+    background: -webkit-linear-gradient(top,#00a9e0,#00a9e0);
+    box-shadow: 0 1px 0 rgba(0,0,0,.6),inset 0 1px 3px rgba(255,255,255,1);
+}
+/* ===  end trends mode === */
+
+
+
+/** big timeline mode - some styles may be the same as small timeline **/
+
+/*temporary hide the smaller smartapp*/
+
+/*end*/
+
+#state2{
+    width: 336px;
+    height: 385px;
+    position: relative;
+    padding-top: 22px;
+    overflow: hidden;
+}
+#state2 #timeline_container{
+    width: 336px;
+    height: 360px;
+    position: relative;
+    overflow: hidden;
+}
+#state2 #new_tweet_btn{
+    width: 42px;
+    height: 25px;
+    cursor: pointer;
+    background-position: 5px -232px;
+    text-indent: 23px;
+    color: gray;
+    font-weight: bold;
+    position: absolute;
+    top: -3px;
+    line-height: 23px;
+}
+
+#state2 #new_tweet_btn:hover{
+    color:#4f4e59;
+    background-position: 5px -273px;
+}
+
+#state2 #new_tweet_btn:active{
+    color:#4F4E59;
+    /*text-shadow: 0 1px 0 rgba(79, 78, 89,0.8);*/
+    background-position: 5px -313px;
+}
+#state2 #close_panel_btn{
+    width:30px;
+    height: 20px;
+    cursor: pointer;
+    position: absolute;
+    top:-3px;
+    right:0px;
+    background: url(../img/close_sprite.png) 11px 7px no-repeat;
+}
+#state2 #close_panel_btn:hover{
+    background-position: 11px -41px;
+}
+
+#timeline{
+    width: 326px;
+    height: 358px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: relative;
+    padding-right:10px;
+    top:5px;
+}
+
+#state2::before{
+    position: absolute;
+    top:22px;left:0;
+    width:326px;
+    height: 36px;
+    content: "";
+    background:  url(../img/timeline_highlights.png) 0px 0 no-repeat;
+    z-index: 200;
+    pointer-events: none;
+}
+#state2::after{
+    position: absolute;
+    bottom:0;left:0;
+    width:326px;
+    height: 36px;
+    content: "";
+    background:  url(../img/timeline_highlights.png) -790px 0 no-repeat;
+    z-index: 200;
+    pointer-events: none;
+}
+#timeline .tweet{
+    width: 282px;
+    padding-left:40px;
+    min-height: 71px;
+    height: auto;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #f5f5f5;
+}
+#timeline .tweet_header{
+    margin-bottom: 0px;
+    height: 20px;
+}
+#timeline .tweet_body{
+    margin-left: 5px;
+    margin-bottom: 9px;
+}
+#timeline .user_pic{
+    height: 36px;
+    width: 36px;
+    position: absolute;
+    left:0; top:8px;
+}
+#timeline .user_pic img{
+    max-height: 36px;
+    max-width: 36px;
+}
+#timeline .tweet:hover,#timeline .tweet.editmode{
+    background:  url(../img/timeline_highlights.png) -418px 0 no-repeat;
+}
+#timeline .tweet:nth-child(1){
+    border-top: none;
+}
+#timeline .tweet:nth-child(n-1){
+    border-top: none;
+}
+#timeline .twi_controls{
+    /*display: block;*/
+    width:129px;
+    height: 20px;
+    letter-spacing:-4px;
+    background: none;
+}
+#timeline .editmode .twi_controls{
+    display: block;
+}
+#timeline .editmode .tweet_time{
+    display: none;
+}
+#timeline .retweet_btn,#timeline .reply_btn{
+    width:64px;
+    text-indent: 22px;
+    letter-spacing: 0px;
+    color:#b3b3b3;
+    height: 21px;
+    line-height: 21px;
+    -webkit-transition:opacity 100ms ease-in;
+}
+#timeline .reply_btn{
+    width:56px;
+    text-indent: 18px;
+    margin-left: 8px;
+}
+
+
+#timeline .reply_btn{
+    background-position: 3px -558px,0 0;
+    color:#4f4e59;
+}
+#timeline .twi_controls:hover .reply_btn{
+    background-position: 3px -518px,0 0;
+    opacity: 0.5;
+}
+#timeline .twi_controls:hover .reply_btn:hover{
+    background-position: 3px -558px,0 0;
+    color:#4f4e59;
+    opacity: 1;
+}
+#timeline .reply_btn:active, .editmode .reply_btn{
+    border-radius: 3px;
+    background: url(../img/twi_sprite.png) 3px -519px  no-repeat ,linear-gradient(top,#7E7D8C,#5A5965) !important;
+    background: url(../img/twi_sprite.png) 3px -519px no-repeat,-webkit-linear-gradient(top,#7E7D8C,#5A5965) !important;
+    box-shadow: 0 1px 0 #fff,inset 1px 1px 2px rgba(0,0,0,.6),inset -1px -1px 2px rgba(0,0,0,.6) !important;
+    text-shadow: 0 1px 0 #4f4e59;
+    color:#e3e3e3 !important;
+    opacity: 1 !important;
+}
+
+#timeline .retweet_btn{
+
+    background-position: 0px -153px;
+    color:#4f4e59;
+}
+#timeline .twi_controls:hover .retweet_btn{
+    background-position: 0px -112px;
+    opacity: 0.5;
+}
+#timeline .twi_controls:hover .retweet_btn:hover{
+    background-position: 0px -153px;
+    color:#4f4e59;
+    opacity: 1 ;
+}
+#timeline .retweet_btn:active{
+    background-position: 0px -193px !important;
+}
+
+#state2 .edit_box{
+    background:url(../img/page_timeline.png) 0 -120px no-repeat;
+    width: 326px;
+
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition:all 400ms ease-in;
+    padding-left:30px;
+}
+#state2 li .edit_box{
+    margin-left:-40px;
+}
+#state2 .edit_box .user_nick{
+    padding-top:5px;
+}
+#state2 li.editmode .edit_box{
+    height: 136px;
+    background-position: 0 0 ;
+}
+#state2.new_tweet #timeline_container > .edit_box{
+    height: 136px;
+    background-position: 0 0 ;
+}
+#state2 li .edit_box::before{
+    position: absolute;
+    width:326px;
+    height: 14px;
+    background:  url(../img/timeline_highlights.png) 0px 0 no-repeat;
+    content:"";
+    pointer-events:none;
+    left: 0;top:0;
+    z-index: 10;
+}
+#state2 .edit_box textarea{
+    background: none;
+    resize: none;
+    border: none;
+    width: 280px;
+    height: 80px;
+    font-size: 13px;
+    padding-top: 6px;
+    outline: none;
+    color:#13547d
+}
+#state2 .charCount{
+    width:50px;
+    height: 21px;
+    position: absolute;
+    bottom: 13px;
+    left: 137px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #918A48;
+    text-align: center;
+    text-shadow: 1px 0 0 rgba(255, 255, 255, 0.5);
+}
+#state2 .timeline_btn{
+    width: 50px;
+    height: 20px;
+    border-radius: 2px;
+    background:#dddddd;
+    text-shadow: none;
+    color:#808080;
+    text-align: center;
+    cursor: pointer;
+}
+#state2 .timeline_btn:hover{
+    background:#838296;
+    text-shadow: none;
+    color:#fff;
+}
+#state2 .tweet_btn{
+    position: absolute;
+    right:37px;
+    bottom:15px;
+    border-radius: 2px 0 0 2px ;
+}
+#state2 .cancel_btn{
+ right: 95px;
+    bottom:15px;
+    position: absolute;
+}
+/*
+Scrollbar
+*/
+::-webkit-scrollbar {
+    height: 7px;
+    width: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8c8c8c;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    min-height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: inherit;
+}
+
