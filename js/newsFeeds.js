@@ -59,8 +59,8 @@ function appendFeedLoaders() {
     $(".feedItemLoader").remove();
     if(newFeedCounter < 0) newFeedCounter = 0;
     for(var i = 0; i < newFeedCounter; i++) {
-        //$("#feedList").append('<li class="feedItemLoader" title="Loading..."><img src="img/mini-loader.gif"></li>');
-        $("<li class='feedItemLoader' title='Loading...'><img src='img/mini-loader.gif'></li>").insertBefore($(".feedItem:not(.taball)").first());
+        $("#feedList").append('<li class="feedItemLoader" title="Loading..."><img src="img/mini-loader.gif"></li>');
+        //$("<li class='feedItemLoader' title='Loading...'><img src='img/mini-loader.gif'></li>").insertBefore($(".feedItem:not(.taball)").first());
     }
 }
 
@@ -280,7 +280,8 @@ function renderFeedsList(){
         lis += '<li class="feedItem taball" rel="all" title="Mix"><div class="feedImg"><img width="16" height="16" src="img/allFeeds.png"></div><div class="newOrOld"></div></li>';
     }
     
-    var feeds = storedFeeds.reverse();
+    //var feeds = storedFeeds.reverse();
+    var feeds = storedFeeds;
     
     for(var i = 0; i < feeds.length; i++) {
         var clicked = (window.currentFeed == feeds[i].id) ? ' clicked' : '';

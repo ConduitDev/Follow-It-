@@ -153,6 +153,9 @@ function openPopUpWindow(name, feed){
         height: 60,
         initParams : feed
     };
+    /*if (name == 'addPopup'){
+        windowPosObj.height = 90;
+    }*/
     if (appMode.appPos == 'side' || appMode.appPos == 'roaming'){
         windowPosObj.left = -220;
         windowPosObj.top = -15;
@@ -258,10 +261,10 @@ function buildRecommendList(){
             feed.icon = feed.icon ? feed.icon : 'img/icon16.png';
             if (localStorage['ReaderAppStoredFeeds']){
                 if (localStorage['ReaderAppStoredFeeds'].indexOf(feed.href) < 0){
-                    $('#recomendFeeds').append('<li><img align="left" class="recFeedIcon" src="'+feed.icon+'"/><span>'+feed.title+'</span> <img rel="'+i+'" class="plusIcon" src="img/recListPlus.png"/><img rel="'+i+'" class="loadIcon" src="img/mini-loader.gif"/></li>');
+                    $('#recomendFeeds').append('<li><img align="left" class="recFeedIcon" src="'+feed.icon+'"/><span>'+feed.title+'</span> <img rel="'+i+'" class="plusIcon" src="img/recListPlus.png"/><img rel="'+i+'" class="loadIcon" src="img/checked.png"/></li>');
                 }
             } else {
-                $('#recomendFeeds').append('<li><img align="left" class="recFeedIcon" src="'+feed.icon+'"/><span>'+feed.title+'</span> <img rel="'+i+'" class="plusIcon" src="img/recListPlus.png"/><img rel="'+i+'" class="loadIcon" src="img/mini-loader.gif"/></li>');
+                $('#recomendFeeds').append('<li><img align="left" class="recFeedIcon" src="'+feed.icon+'"/><span>'+feed.title+'</span> <img rel="'+i+'" class="plusIcon" src="img/recListPlus.png"/><img rel="'+i+'" class="loadIcon" src="img/checked.png"/></li>');
             }
             i++;
         }

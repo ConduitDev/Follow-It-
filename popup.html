@@ -59,6 +59,16 @@
                 vertical-align: middle;
                 margin-top: 3px;
             }
+            .closeBtn{
+                position:absolute;
+                width: 7px;
+                height: 8px;
+                right: 6px;
+                top: 6px;
+                background: url('img/closeSmall.png') 0 0 no-repeat;
+                cursor:pointer!important;
+                z-index:99999;
+            }
           </style>
           <script>
               var winId = window.location.search.split('?id=')[1];
@@ -77,13 +87,13 @@
                             $('.popUpText').html("Sorry<br /> We weren’t able to find the required feed");
                         } else {
                             var feed = JSON.parse(params);
-                            $('.popUpText').text('You’ll find here the latest from:');
+                            $('.popUpText').text('Find here the last from:');
                             $('body').append('<div class="feedText"><div class="feedSmth"><img src="'+feed.icon+'"/><span class="feedTitle">'+feed.title+'</span></div></div>');
                         }
                     });
               }
               
-              setTimeout(closeWindow, 4000);
+              //setTimeout(closeWindow, 4000);
               
               function closeWindow(){
                     var id = parseInt(location.search.substr(4));
@@ -92,6 +102,7 @@
           </script>
     </head>
     <body>
+        <div class="closeBtn" onclick="closeWindow()"></div>
         <!--span>Seat back and surf, sites will offer to FOLLOW them</span-->
         <span class="popUpText">Seat back and surf, sites will offer to FOLLOW them</span>
     </body>

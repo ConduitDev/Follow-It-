@@ -22,7 +22,7 @@
                 "default_width": 550,
                 "default_height": 560,
                 "frame_type": "arrow",
-                "close_on_lost_focus": true,
+                "close_on_lost_focus": false,
                 "inspect": false
             },
             {
@@ -44,7 +44,7 @@
                 "default_state": "roaming",
                 "minibar_appearance": "html",
                 "default_width": 205,
-                "default_height": 60,
+                "default_height": 85,
                 "frame_type": "arrow",
                 "close_on_lost_focus": true,
                 "inspect": false

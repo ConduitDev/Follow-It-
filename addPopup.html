@@ -59,6 +59,24 @@
                 cursor: pointer;
                 float: left;
             }
+            .error{
+                display:none;
+                font: 12px "Segoe UI",ariel,sans-serif;
+                color:red;
+                text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+                font-weight:bold;
+                text-align: center;
+            }
+            .closeBtn{
+                position:absolute;
+                width: 7px;
+                height: 8px;
+                right: 6px;
+                top: 6px;
+                background: url('img/closeSmall.png') 0 0 no-repeat;
+                cursor:pointer!important;
+                z-index:99999;
+            }
           </style>
           <script>
               var leaveTimeout;
@@ -102,8 +120,12 @@
                     $.getJSON(config.feedFinderURL+encodeURIComponent(sendUrl)+'&callback=?', function(data){
                         if(data.feeds.length == 0) {
                             setTimeout(function(){
-                                chrome.extension.sendRequest({msg: "showPopUp", feed: {error:'error'}});
-                                closeWindow();
+                                //chrome.extension.sendRequest({msg: "showPopUp", feed: {error:'error'}});
+                                //closeWindow();
+                                
+                                $('#addContainer').show();
+                                $('#progressContainer').hide();
+                                $('.error').show();
                             }, 2000);
                             return;
                         }
@@ -149,7 +171,7 @@
               function initMouseLeave() {
                     //clearTimeout(leaveTimeout);
                     $('body').mouseleave(function(){
-                        leaveTimeout = setTimeout(closeWindow, 5000);
+                        //leaveTimeout = setTimeout(closeWindow, 5000);
                     });
               }
               
@@ -163,12 +185,16 @@
           </script>
     </head>
     <body onload="init()">
+       <div class="closeBtn" onclick="closeWindow()"></div>
        <div id="addContainer">
             <div id="textLabel">
                 Add a URL to your list :
             </div>
             <input id="url" type="text" value="http://">
             <div id="addBtn" onclick="checkUrl($('#url').val())"></div>
+            <div class="error">
+                Could not find any feeds, please try again
+            </div>
        </div>
        <div id="progressContainer">
             <div id="textLabel">
